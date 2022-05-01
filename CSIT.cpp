@@ -1,4 +1,4 @@
-// Author:             Anton Silivonchyk
+// Authors:            Anton Silivonchyk, 
 // Source file:        CSIT.cpp
 // Description:        Final Project: streaming service;
 // IDE used:           Visual Studio 2019
