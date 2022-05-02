@@ -62,14 +62,20 @@ class DB {
             overWriteFile(CommentData, CommentPath);
         }
 
-        int GetRating(string movieId)
+        double GetRating(string movieId)
         {
             string path = GetRatingTablePath(movieId);
             string data = GetTableData(path);
-            const int RESULT = ParseAndCalculateRating(data);
+            const double RESULT = ParseAndCalculateRating(data);
             return RESULT;
         }
-
+        void DisplayReviews(string movieId)
+        {
+            string path = GetCommentsTablePath(movieId);
+            string data = GetTableData(path);
+            std::vector<string> dbData = Parser(data);
+            for (auto line : dbData) cout << line << endl;
+        }
 
     private:
         string getTablePath(int tableCode) 
@@ -93,10 +99,11 @@ class DB {
             for (auto i : parserData) 
             {   
                 index++;
-                total += std::stoi(i);
+                if(i.length() != 0) total += std::stoi(i);
             }
             if (index == 0) return 0;
-            return(total / index);
+            double result = (double)total / (double)index;
+            return result;
         }
         std::vector<string> Parser(string data) 
         {

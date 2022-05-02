@@ -49,13 +49,4 @@ class Movie {
 		}
 
 		string GetMovieId() { return id; }
-
-		void ShowReview() 
-		{
-			cout << id << endl;
-
-
-
-
-		}
 };

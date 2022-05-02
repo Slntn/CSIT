@@ -143,7 +143,19 @@ void UserMenu(std::vector<Movie> dataList)
             UserMenu(dataList);
         }
         if (menu == 3) {
-            dataList.at(movie).ShowReview();
+            string id = dataList.at(movie).GetMovieId();
+            DB dbCtrl;
+            double currentMovieRaring = dbCtrl.GetRating(id);
+            if (currentMovieRaring == 0) 
+            {
+                cout << "The selected show has not been rated yet." << endl;
+            }else 
+            {
+                cout << "Rating: " << dbCtrl.GetRating(id) << endl;
+                cout << "Reviews: " << endl;
+                dbCtrl.DisplayReviews(id);
+            }
+            
         }
         if (menu == 4){ menu = -1; }
     } while (menu != -1);
@@ -168,7 +180,7 @@ int MovieMenu() {
     cout << "\n\n1. Play Movie" << endl;
     cout << "2. Show movie list" << endl;
     cout << "3. Show review" << endl;
-    cout << "4. Close Menu and Exit" << endl;
+    cout << "4. Close Menu and LogOut" << endl;
     cin >> menu;
     return menu;
 }
