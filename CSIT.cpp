@@ -9,8 +9,9 @@
 using namespace std;
 
 bool MenuSelection(int&);
-string UserLogin(bool);
 void UserPanel(int, bool);
+void ShowMovieList(bool);
+string UserLogin(bool);
 
 int main()
 {   
@@ -25,7 +26,7 @@ int main()
                 UserPanel(2, true);
 				break;
             case 3:
-                //batch processing
+                cout << "Batch processing!" << endl;
                 break;
         }
     } while (!MenuSelection(menuSelection));
@@ -64,11 +65,24 @@ void UserPanel(int codePanel, bool isAdminLogin)
     bool loginResult = dbReader.VerifyCredentials(login);
     if (loginResult) 
     {
-        if (codePanel == 1) cout << "show user panel" << endl;
-        if (codePanel == 2 && login.length() != 3) cout << "show admin panel" << endl;
+        if (codePanel == 1) 
+        {
+            ShowMovieList(false);
+        }
+        if (codePanel == 2 && login.length() != 3) 
+        {
+            ShowMovieList(true);
+        }
     }
     else 
     {
         cout << "The entered user credentials are not correct! Please check data and try again!" << endl;
     }
+}
+
+void ShowMovieList(bool isAdmin) 
+{
+    DB dbReader;
+    const string movieList = dbReader.GetTableData(3);
+    cout << movieList << endl;
 }
