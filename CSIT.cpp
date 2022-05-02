@@ -154,8 +154,10 @@ void MovieRaiting(string movieId)
     cin >> rating;
     cout << "Enter your review : " << endl;
     cin >> comment;
+
+    std::string s = std::to_string(rating);
     DB dbCtrl;
-    dbCtrl.UpdateRating(movieId, rating, comment);
+    dbCtrl.UpdateRating(movieId, s, comment);
 }
 
 

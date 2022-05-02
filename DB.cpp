@@ -50,14 +50,14 @@ class DB {
             file.close();
             return fileData;
         }
-        void UpdateRating(string movieId, int rating, string comment)
+        void UpdateRating(string movieId, string rating, string comment)
         {
             string RatingPath = GetRatingTablePath(movieId);
             string CommentPath = GetCommentsTablePath(movieId);
             string RatingData = GetTableData(RatingPath);
             string CommentData = GetTableData(CommentPath);
-            RatingData = ";" + rating;
-            CommentData = ";" + comment;
+            RatingData = RatingData + ";" + rating;
+            CommentData = CommentData +";" + comment;
             overWriteFile(RatingData, RatingPath);
             overWriteFile(CommentData, CommentPath);
         }
