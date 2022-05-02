@@ -13,9 +13,10 @@ bool MenuSelection(int&);
 bool AdminMainMenu(int&);
 void UserPanel(int, bool);
 void UserMenu(std::vector<Movie>);
-void AdminMenu(std::vector<Movie>);
+void AdminMenu();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
+void ShowUserList();
 int MovieMenu();
 string UserLogin(bool);
 std::vector<Movie> ShowMovieList();
@@ -78,7 +79,7 @@ void UserPanel(int codePanel, bool isAdminLogin)
         }
         if (codePanel == 2 && login.length() != 3) 
         {
-            AdminMenu(ShowMovieList());
+            AdminMenu();
         }
     }
     else 
@@ -176,6 +177,19 @@ void MovieRaiting(string movieId)
     dbCtrl.UpdateRating(movieId, s, comment);
 }
 
+void ShowUserList() 
+{
+    DB dbReader;
+    std::vector<string> dbData = dbReader.GetAllUsers();
+    int i = 0;
+    cout << "List of the users: " << endl;
+    for (auto user : dbData) 
+    {
+        cout << i << user << endl;
+        i++;
+    }
+}
+
 int MovieMenu() {
     int menu = 0;
     cout << "\n\n1. Play Movie" << endl;
@@ -186,39 +200,17 @@ int MovieMenu() {
     return menu;
 }
 
-void AdminMenu(std::vector<Movie> dataList) 
+void AdminMenu() 
 {
     int select = 0;
     do {
-        switch (select) {
-            case 1: {
-                select = 0;
-                break;
-            }
-            case 2: {
-                select = 0;
-                break;
-            }
-            case 3: {
-                select = 0;
-                break;
-            }
-            case 4: {
-                ShowMovieList();
-                break;
-            }
-            case 5: {
-                select = 0;
-                break;
-            }
-            case 6: {
-                select = 0;
-                break;
-            }
-        
-        }
-
-    } while (!AdminMainMenu(select));
+        if (select == 1) ShowUserList();
+        if (select == 2) {}//Add a new user
+        if (select == 3) {}//Delete user
+        if (select == 4) ShowMovieList();
+        if (select == 5) {}//Add a new movie
+        if (select == 6) {} // Delete a movie;
+    }while (!AdminMainMenu(select));
 
 }
 

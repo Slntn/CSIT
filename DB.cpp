@@ -76,6 +76,11 @@ class DB {
             std::vector<string> dbData = Parser(data);
             for (auto line : dbData) cout << line << endl;
         }
+        std::vector<string> GetAllUsers()
+        {
+            string dbData = GetTableData(2);
+            return Parser(dbData);
+        }
 
     private:
         string getTablePath(int tableCode) 
