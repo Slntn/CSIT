@@ -47,4 +47,6 @@ class Movie {
 			cout << "Released year: " << year << endl;
 			cout << "Available till: " << exparation << endl;
 		}
+
+		string GetMovieId() { return id; }
 };

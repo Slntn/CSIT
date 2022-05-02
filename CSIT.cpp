@@ -14,6 +14,7 @@ void UserPanel(int, bool);
 void UserMenu(std::vector<Movie>);
 void AdminMenu(std::vector<Movie>);
 void DisplayMovieList(std::vector<Movie>);
+void MovieRaiting(string);
 string UserLogin(bool);
 std::vector<Movie> ShowMovieList();
 
@@ -110,6 +111,7 @@ std::vector<Movie> ShowMovieList()
 
 void DisplayMovieList(std::vector<Movie> movies)
 {
+    cout << "Available movies: " << endl;
     int index = 0;
     for (auto i : movies)
     {
@@ -135,8 +137,7 @@ void UserMenu(std::vector<Movie> dataList)
             cout << "A few time later..." << endl;
             cout << "Do you want to rate a movie? 1 - Yes / Any number - No" << endl;
             cin >> selection;
-            if (selection == 1) {// add rating!  
-            }
+            if (selection == 1) MovieRaiting(dataList.at(menu).GetMovieId());
             DisplayMovieList(dataList);
         } 
         if (menu == 2) DisplayMovieList(dataList);
@@ -144,6 +145,31 @@ void UserMenu(std::vector<Movie> dataList)
     } while (menu != -1);
 
 }
+
+void MovieRaiting(string movieId) 
+{
+    int rating = 0;
+    string comment = "";
+    cout << "Enter your rating (0 - 10) : " << endl;
+    cin >> rating;
+    cout << "Enter your review : " << endl;
+    cin >> comment;
+    DB dbCtrl;
+    dbCtrl.UpdateRating(movieId, rating, comment);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 void AdminMenu(std::vector<Movie> dataList) 
 {
     

@@ -25,6 +25,8 @@ class DB {
             return found;
         }
         string GetUserTablePath(string userName) { return "c:\\db\\users\\" + userName + ".txt"; }
+        string GetRatingTablePath(string movieId) { return "c:\\db\\rating\\" + movieId + ".txt"; }
+        string GetCommentsTablePath(string movieId) { return "c:\\db\\comments\\" + movieId + ".txt"; }
         string GetTableData(int tableCode) 
         {
             string filePath = getTablePath(tableCode);
@@ -37,6 +39,28 @@ class DB {
             file.close();
             return fileData;
         }
+        string GetTableData(string path)
+        {
+            string line, fileData;
+            ifstream file(path);
+            if (!file.is_open()) {
+                cout << "The file doesn't exist! Please check the path and try again." << endl;
+            }
+            while (getline(file, line)) { fileData = line; }
+            file.close();
+            return fileData;
+        }
+        void UpdateRating(string movieId, int rating, string comment)
+        {
+            string RatingPath = GetRatingTablePath(movieId);
+            string CommentPath = GetCommentsTablePath(movieId);
+            string RatingData = GetTableData(RatingPath);
+            string CommentData = GetTableData(CommentPath);
+            RatingData = ";" + rating;
+            CommentData = ";" + comment;
+            overWriteFile(RatingData, RatingPath);
+            overWriteFile(CommentData, CommentPath);
+        }
 
 
     private:
@@ -46,8 +70,11 @@ class DB {
             if (tableCode == 2) return "c:\\db\\users.txt";
             if (tableCode == 3) return "c:\\db\\movies.txt";
             if (tableCode == 4) return "c:\\db\\counter.txt";
-            if (tableCode == 5) return "c:\\db\\rating.txt";
-            if (tableCode == 6) return "c:\\db\\comments.txt";
             return "NA";
+        }
+        void overWriteFile(string data, string path) {
+            std::ofstream ofs(path, std::ofstream::trunc);
+            ofs << data;
+            ofs.close();
         }
 };
