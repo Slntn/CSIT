@@ -149,12 +149,11 @@ void UserMenu(std::vector<Movie> dataList)
 void MovieRaiting(string movieId) 
 {
     int rating = 0;
-    string comment = "";
+    string comment;
     cout << "Enter your rating (0 - 10) : " << endl;
     cin >> rating;
     cout << "Enter your review : " << endl;
-    cin >> comment;
-
+    std::getline(std::cin >> std::ws, comment);
     std::string s = std::to_string(rating);
     DB dbCtrl;
     dbCtrl.UpdateRating(movieId, s, comment);
