@@ -204,7 +204,7 @@ void AdminMenu(std::vector<Movie> dataList)
                 break;
             }
             case 4: {
-                select = 0;
+                ShowMovieList();
                 break;
             }
             case 5: {
@@ -228,7 +228,7 @@ bool AdminMainMenu(int& selection)
     cout << "1. See list of users" << endl;
     cout << "2. Add a new user" << endl;
     cout << "3. Delete user" << endl;
-    cout << "4. See list of movies" << endl;
+    cout << "4. See a list of available movies" << endl;
     cout << "5. Add a new movie" << endl;
     cout << "6. Delete a movie" << endl;
     cout << "0. Close Menu and LogOut" << endl;
