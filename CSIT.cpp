@@ -129,7 +129,8 @@ void UserMenu(std::vector<Movie> dataList)
         dataList.at(menu).ShowMovieInfo();
         cout << "\n\n1. Play Movie" << endl;
         cout << "2. Show movie list" << endl;
-        cout << "3. Close Menu and Exit" << endl;
+        cout << "3. Show review" << endl;
+        cout << "4. Close Menu and Exit" << endl;
         cin >> menu;
         if (menu == 1) 
         {
@@ -141,7 +142,8 @@ void UserMenu(std::vector<Movie> dataList)
             DisplayMovieList(dataList);
         } 
         if (menu == 2) DisplayMovieList(dataList);
-        if (menu == 3) menu = -1;
+        if (menu == 3) cout << "review" << endl;
+        if (menu == 4) menu = -1;
     } while (menu != -1);
 
 }
