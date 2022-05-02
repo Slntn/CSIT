@@ -81,6 +81,14 @@ class DB {
             string dbData = GetTableData(2);
             return Parser(dbData);
         }
+        void AddNewMovie(string newMovie) 
+        {
+            string id = "M0VIE#" + Counter() + ',';
+            string newRecord = id + newMovie;
+            string tableData = GetTableData(3);
+            string newTableData = tableData + newRecord;
+            overWriteFile(newTableData, getTablePath(3));
+        }
 
     private:
         string getTablePath(int tableCode) 
@@ -120,5 +128,12 @@ class DB {
                 result.push_back(substr);
             }
             return result;
+        }
+        string Counter() 
+        {
+            string value = GetTableData(4);
+            string newValue = std::to_string((std::stoi(value) + 1));
+            overWriteFile(newValue, getTablePath(4));
+            return value;
         }
 };

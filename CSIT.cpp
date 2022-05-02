@@ -14,9 +14,11 @@ bool AdminMainMenu(int&);
 void UserPanel(int, bool);
 void UserMenu(std::vector<Movie>);
 void AdminMenu();
+void AddNewMovie();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
 void ShowUserList();
+void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
 std::vector<Movie> ShowMovieList();
@@ -212,7 +214,7 @@ void AdminMenu()
             ShowMovieList();
             cout << endl;
         }
-        if (select == 5) {}//Add a new movie
+        if (select == 5) AddNewMovie();
         if (select == 6) {} // Delete a movie;
     }while (!AdminMainMenu(select));
 
@@ -230,4 +232,26 @@ bool AdminMainMenu(int& selection)
     cout << "0. Close Menu and LogOut" << endl;
     cin >> selection;
     return (selection == 0);
+}
+
+void AddNewMovie()
+{
+    DB dbControl;
+    string newMovie = "";
+    SetString(newMovie, "Enter title : ", ',');
+    SetString(newMovie, "Enter show length : ", ',');
+    SetString(newMovie, "Enter MPAA rating : ", ',');
+    SetString(newMovie, "Enter genres : ", ',');
+    SetString(newMovie, "Enter release year : ", ',');
+    SetString(newMovie, "Enter expiration date or 'NA'(Example: 05 / 02 / 2024): ", ';');
+    dbControl.AddNewMovie(newMovie);
+    cout << "Add new movie process - completed!" << endl;
+}
+
+void SetString(string& newMovie, string msg, char sign) 
+{
+    string value = "";
+    cout << msg << endl;
+    std::getline(std::cin >> std::ws, value);
+    newMovie = newMovie + value + sign;
 }
