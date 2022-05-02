@@ -15,6 +15,7 @@ void UserMenu(std::vector<Movie>);
 void AdminMenu(std::vector<Movie>);
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
+int MovieMenu();
 string UserLogin(bool);
 std::vector<Movie> ShowMovieList();
 
@@ -123,15 +124,11 @@ void DisplayMovieList(std::vector<Movie> movies)
 void UserMenu(std::vector<Movie> dataList) 
 {
     int menu = 0, movie = 0;
-    do {
-        cout << "\nSelect Movie:";
-        cin >> movie;
-        dataList.at(movie).ShowMovieInfo();
-        cout << "\n\n1. Play Movie" << endl;
-        cout << "2. Show movie list" << endl;
-        cout << "3. Show review" << endl;
-        cout << "4. Close Menu and Exit" << endl;
-        cin >> menu;
+    cout << "\nSelect Movie:";
+    cin >> movie;
+    dataList.at(movie).ShowMovieInfo();
+    do {    
+        menu = MovieMenu();
         if (menu == 1) 
         {
             int selection;
@@ -141,9 +138,14 @@ void UserMenu(std::vector<Movie> dataList)
             if (selection == 1) MovieRaiting(dataList.at(menu).GetMovieId());
             DisplayMovieList(dataList);
         } 
-        if (menu == 2) DisplayMovieList(dataList);
-        if (menu == 3) dataList.at(movie).ShowReview();
-        if (menu == 4) menu = -1;
+        if (menu == 2) {
+            DisplayMovieList(dataList);
+            UserMenu(dataList);
+        }
+        if (menu == 3) {
+            dataList.at(movie).ShowReview();
+        }
+        if (menu == 4){ menu = -1; }
     } while (menu != -1);
 
 }
@@ -161,6 +163,15 @@ void MovieRaiting(string movieId)
     dbCtrl.UpdateRating(movieId, s, comment);
 }
 
+int MovieMenu() {
+    int menu = 0;
+    cout << "\n\n1. Play Movie" << endl;
+    cout << "2. Show movie list" << endl;
+    cout << "3. Show review" << endl;
+    cout << "4. Close Menu and Exit" << endl;
+    cin >> menu;
+    return menu;
+}
 
 
 
