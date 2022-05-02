@@ -142,6 +142,7 @@
     <ClCompile Include="Batch.cpp" />
     <ClCompile Include="CSIT.cpp" />
     <ClCompile Include="DB.cpp" />
+    <ClCompile Include="Movie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Batch.h" />

@@ -6,12 +6,16 @@
 #include <iostream>
 #include <string>
 #include "DB.cpp"
+#include "Movie.cpp"
 using namespace std;
 
 bool MenuSelection(int&);
 void UserPanel(int, bool);
-void ShowMovieList(bool);
+void UserMenu(std::vector<Movie>);
+void AdminMenu(std::vector<Movie>);
+void DisplayMovieList(std::vector<Movie>);
 string UserLogin(bool);
+std::vector<Movie> ShowMovieList();
 
 int main()
 {   
@@ -67,11 +71,11 @@ void UserPanel(int codePanel, bool isAdminLogin)
     {
         if (codePanel == 1) 
         {
-            ShowMovieList(false);
+            UserMenu(ShowMovieList());
         }
         if (codePanel == 2 && login.length() != 3) 
         {
-            ShowMovieList(true);
+            AdminMenu(ShowMovieList());
         }
     }
     else 
@@ -80,9 +84,67 @@ void UserPanel(int codePanel, bool isAdminLogin)
     }
 }
 
-void ShowMovieList(bool isAdmin) 
+std::vector<Movie> ShowMovieList()
 {
     DB dbReader;
-    const string movieList = dbReader.GetTableData(3);
-    cout << movieList << endl;
+    vector<string> result;
+    vector<Movie> movieListVector;
+    const string movieList = dbReader.GetTableData(3);   
+    stringstream strStream(movieList);
+    while (strStream.good()) {
+        string str;
+        getline(strStream, str, ';');
+        result.push_back(str);
+    }
+
+    cout << "Available movies: " << endl;
+    const int size = (result.size() - 1);
+    for (int i = 0; i < size; i++)
+    {      
+       Movie mv(result.at(i));
+       mv.DisplayMovie(i);
+       movieListVector.push_back(mv);
+    }
+    return movieListVector;
+}
+
+void DisplayMovieList(std::vector<Movie> movies)
+{
+    int index = 0;
+    for (auto i : movies)
+    {
+        i.DisplayMovie(index);
+        index++;
+    }
+}
+
+void UserMenu(std::vector<Movie> dataList) 
+{
+    int menu = 0;
+    do {
+        cout << "\nSelect Movie:";
+        cin >> menu;
+        dataList.at(menu).ShowMovieInfo();
+        cout << "\n\n1. Play Movie" << endl;
+        cout << "2. Show movie list" << endl;
+        cout << "3. Close Menu and Exit" << endl;
+        cin >> menu;
+        if (menu == 1) 
+        {
+            int selection;
+            cout << "A few time later..." << endl;
+            cout << "Do you want to rate a movie? 1 - Yes / Any number - No" << endl;
+            cin >> selection;
+            if (selection == 1) {// add rating!  
+            }
+            DisplayMovieList(dataList);
+        } 
+        if (menu == 2) DisplayMovieList(dataList);
+        if (menu == 3) menu = -1;
+    } while (menu != -1);
+
+}
+void AdminMenu(std::vector<Movie> dataList) 
+{
+    
 }
