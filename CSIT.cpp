@@ -122,11 +122,11 @@ void DisplayMovieList(std::vector<Movie> movies)
 
 void UserMenu(std::vector<Movie> dataList) 
 {
-    int menu = 0;
+    int menu = 0, movie = 0;
     do {
         cout << "\nSelect Movie:";
-        cin >> menu;
-        dataList.at(menu).ShowMovieInfo();
+        cin >> movie;
+        dataList.at(movie).ShowMovieInfo();
         cout << "\n\n1. Play Movie" << endl;
         cout << "2. Show movie list" << endl;
         cout << "3. Show review" << endl;
@@ -142,7 +142,7 @@ void UserMenu(std::vector<Movie> dataList)
             DisplayMovieList(dataList);
         } 
         if (menu == 2) DisplayMovieList(dataList);
-        if (menu == 3) cout << "review" << endl;
+        if (menu == 3) dataList.at(movie).ShowReview();
         if (menu == 4) menu = -1;
     } while (menu != -1);
 
