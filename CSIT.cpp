@@ -10,6 +10,7 @@
 using namespace std;
 
 bool MenuSelection(int&);
+bool AdminMainMenu(int&);
 void UserPanel(int, bool);
 void UserMenu(std::vector<Movie>);
 void AdminMenu(std::vector<Movie>);
@@ -185,18 +186,52 @@ int MovieMenu() {
     return menu;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void AdminMenu(std::vector<Movie> dataList) 
 {
-    
+    int select = 0;
+    do {
+        switch (select) {
+            case 1: {
+                select = 0;
+                break;
+            }
+            case 2: {
+                select = 0;
+                break;
+            }
+            case 3: {
+                select = 0;
+                break;
+            }
+            case 4: {
+                select = 0;
+                break;
+            }
+            case 5: {
+                select = 0;
+                break;
+            }
+            case 6: {
+                select = 0;
+                break;
+            }
+        
+        }
+
+    } while (!AdminMainMenu(select));
+
+}
+
+bool AdminMainMenu(int& selection) 
+{
+    cout << "Admin Control:" << endl;
+    cout << "1. See list of users" << endl;
+    cout << "2. Add a new user" << endl;
+    cout << "3. Delete user" << endl;
+    cout << "4. See list of movies" << endl;
+    cout << "5. Add a new movie" << endl;
+    cout << "6. Delete a movie" << endl;
+    cout << "0. Close Menu and LogOut" << endl;
+    cin >> selection;
+    return (selection == 0);
 }
