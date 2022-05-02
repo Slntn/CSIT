@@ -62,6 +62,14 @@ class DB {
             overWriteFile(CommentData, CommentPath);
         }
 
+        int GetRating(string movieId)
+        {
+            string path = GetRatingTablePath(movieId);
+            string data = GetTableData(path);
+            const int RESULT = ParseAndCalculateRating(data);
+            return RESULT;
+        }
+
 
     private:
         string getTablePath(int tableCode) 
@@ -72,9 +80,33 @@ class DB {
             if (tableCode == 4) return "c:\\db\\counter.txt";
             return "NA";
         }
-        void overWriteFile(string data, string path) {
+        void overWriteFile(string data, string path) 
+        {
             std::ofstream ofs(path, std::ofstream::trunc);
             ofs << data;
             ofs.close();
+        }
+        double ParseAndCalculateRating(string data)
+        {
+            vector<string> parserData = Parser(data);
+            int index = 0, total = 0;
+            for (auto i : parserData) 
+            {   
+                index++;
+                total += std::stoi(i);
+            }
+            if (index == 0) return 0;
+            return(total / index);
+        }
+        std::vector<string> Parser(string data) 
+        {
+            vector<string> result;
+            stringstream s_stream(data);
+            while (s_stream.good()) {
+                string substr;
+                getline(s_stream, substr, ';');
+                result.push_back(substr);
+            }
+            return result;
         }
 };

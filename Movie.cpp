@@ -52,6 +52,10 @@ class Movie {
 
 		void ShowReview() 
 		{
-			cout << "Display X" << endl;
+			cout << id << endl;
+
+
+
+
 		}
 };
