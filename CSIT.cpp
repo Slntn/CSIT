@@ -185,9 +185,10 @@ void ShowUserList()
     cout << "List of the users: " << endl;
     for (auto user : dbData) 
     {
-        cout << i << user << endl;
+        if(user.length()) cout << i << user << endl;
         i++;
     }
+    cout << endl;
 }
 
 int MovieMenu() {
@@ -207,7 +208,10 @@ void AdminMenu()
         if (select == 1) ShowUserList();
         if (select == 2) {}//Add a new user
         if (select == 3) {}//Delete user
-        if (select == 4) ShowMovieList();
+        if (select == 4) {
+            ShowMovieList();
+            cout << endl;
+        }
         if (select == 5) {}//Add a new movie
         if (select == 6) {} // Delete a movie;
     }while (!AdminMainMenu(select));
