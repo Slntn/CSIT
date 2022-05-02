@@ -5,10 +5,12 @@
 
 #include <iostream>
 #include <string>
+#include "DB.cpp"
 using namespace std;
 
 bool MenuSelection(int&);
-string UserLogin();
+string UserLogin(bool);
+void UserPanel(int, bool);
 
 int main()
 {   
@@ -17,10 +19,10 @@ int main()
         switch (menuSelection) 
         {
 			case 1:
-                UserLogin();
+                UserPanel(1, false);
 				break;
-            case 2: 
-                //admin panel
+            case 2:
+                UserPanel(2, true);
 				break;
             case 3:
                 //batch processing
@@ -42,11 +44,31 @@ bool MenuSelection(int& menuSelection)
     return (menuSelection == 0);
 }
 
-string UserLogin()
+string UserLogin(bool adminLogin)
 {
-    string userLogin = "";
-    cout << "Enter user login:";
-    cin >> userLogin;
+    string user = "", pass = "";
+    cout << "Please, enter user name:";
+    cin >> user;
     cout << endl;
-    return userLogin;
+    if (adminLogin && user != "admin") return "N?A";
+    cout << "Please, enter password:";
+    cin >> pass;
+    cout << endl;
+    return user + ":" + pass;
+}
+
+void UserPanel(int codePanel, bool isAdminLogin)
+{   
+    DB dbReader;
+    string login = UserLogin(isAdminLogin);
+    bool loginResult = dbReader.VerifyCredentials(login);
+    if (loginResult) 
+    {
+        if (codePanel == 1) cout << "show user panel" << endl;
+        if (codePanel == 2 && login.length() != 3) cout << "show admin panel" << endl;
+    }
+    else 
+    {
+        cout << "The entered user credentials are not correct! Please check data and try again!" << endl;
+    }
 }

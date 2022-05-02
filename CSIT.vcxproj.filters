@@ -21,9 +21,15 @@
     <ClCompile Include="DB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Batch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Batch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
