@@ -87,7 +87,7 @@ class DB {
             string tableData = GetTableData(MOVIE_TABLE);
             string newTableData = tableData + newRecord;
             overWriteFile(newTableData, getTablePath(MOVIE_TABLE));
-            //create bew tables
+            //create new tables
             overWriteFile("", GetRatingTablePath(id));
             overWriteFile("", GetCommentsTablePath(id));
         }
@@ -121,6 +121,19 @@ class DB {
             
             overWriteFile(newUserData, getTablePath(USERS_TABLE));
             overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
+        }
+        void DeleteMovie(string movieId)
+        {
+            string dbData = GetTableData(MOVIE_TABLE);
+            vector<string> data = Parser(dbData);
+            string newData = "";
+            for (std::string movie : data)
+                if (movie.rfind(movieId, 0) != 0) newData += (movie + ";");
+            overWriteFile(newData, getTablePath(MOVIE_TABLE));
+            string pathR = GetRatingTablePath(movieId);
+            string pathC = GetCommentsTablePath(movieId);
+            std::remove(pathR.c_str());
+            std::remove(pathC.c_str());
         }
 
     private:

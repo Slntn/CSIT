@@ -17,6 +17,7 @@ void AdminMenu();
 void AddNewMovie();
 void AddNewUser();
 void DeleteUser();
+void DeleteMovie();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
 void ShowUserList();
@@ -206,12 +207,13 @@ void AdminMenu()
         if (select == 1) ShowUserList();
         if (select == 2) AddNewUser();
         if (select == 3) DeleteUser();
-        if (select == 4) {
+        if (select == 4) 
+        {
             ShowMovieList(true);
             cout << endl;
         }
         if (select == 5) AddNewMovie();
-        if (select == 6) {} // Delete a movie;
+        if (select == 6) DeleteMovie();
     }while (!AdminMainMenu(select));
 
 }
@@ -278,6 +280,14 @@ void DeleteUser()
     }
     DB dbControl;
     dbControl.DeleteUser(userId);
+}
+
+void DeleteMovie() 
+{
+    ShowMovieList(true);
+    string id = RequestValue("Enter movie ID:");
+    DB dbControl;
+    dbControl.DeleteMovie(id);
 }
 
 string RequestValue(string msg) 
