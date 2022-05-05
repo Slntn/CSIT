@@ -15,12 +15,14 @@ void UserPanel(int, bool);
 void UserMenu(std::vector<Movie>);
 void AdminMenu();
 void AddNewMovie();
+void AddNewUser();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
 void ShowUserList();
 void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
+string GetCurrentDay();
 std::vector<Movie> ShowMovieList();
 
 int main()
@@ -65,7 +67,7 @@ string UserLogin(bool adminLogin)
     cout << "Please, enter password:";
     cin >> pass;
     cout << endl;
-    return user + ":" + pass;
+    return user + "," + pass;
 }
 
 void UserPanel(int codePanel, bool isAdminLogin)
@@ -208,7 +210,7 @@ void AdminMenu()
     int select = 0;
     do {
         if (select == 1) ShowUserList();
-        if (select == 2) {}//Add a new user
+        if (select == 2) AddNewUser();
         if (select == 3) {}//Delete user
         if (select == 4) {
             ShowMovieList();
@@ -248,10 +250,25 @@ void AddNewMovie()
     cout << "Add new movie process - completed!" << endl;
 }
 
-void SetString(string& newMovie, string msg, char sign) 
+void SetString(string& localVar, string msg, char sign) 
 {
     string value = "";
     cout << msg << endl;
     std::getline(std::cin >> std::ws, value);
-    newMovie = newMovie + value + sign;
+    localVar = localVar + value + sign;
+}
+
+void AddNewUser()
+{
+    DB dbControl;
+    string user = "";
+    string cred = "";
+    SetString(user, "Enter user id : ", ',');
+    cred = user;
+    SetString(user, "Enter user first name : ", ',');
+    SetString(user, "Enter user last name : ", ',');
+    SetString(user, "Enter current date (Example: 05 / 02 / 2024): ", ';');
+    SetString(cred, "Enter user password : ", ';');
+    dbControl.AddNewUser(user, cred);
+    cout << "Add new user process - completed!" << endl;
 }

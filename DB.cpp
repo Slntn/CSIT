@@ -89,6 +89,17 @@ class DB {
             string newTableData = tableData + newRecord;
             overWriteFile(newTableData, getTablePath(3));
         }
+        void AddNewUser(string user, string cred)
+        {
+            const int PASSWORD_TABLE = 1;
+            const int USERS_TABLE = 2;
+            string passTableData = GetTableData(PASSWORD_TABLE);
+            string usersTableData = GetTableData(USERS_TABLE);
+            string newCredData = passTableData + cred;
+            string newUsersData = usersTableData + user;
+            overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
+            overWriteFile(newUsersData, getTablePath(USERS_TABLE));
+        }
 
     private:
         string getTablePath(int tableCode) 
