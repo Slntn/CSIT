@@ -23,6 +23,7 @@ void ShowUserList();
 void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
+string RequestValue(string);
 std::vector<Movie> ShowMovieList(bool isAdmin = false);
 
 int main()
@@ -268,5 +269,22 @@ void AddNewUser()
 
 void DeleteUser()
 {
+    ShowUserList();
+    string userId = RequestValue("Enter user ID:");
+    if (userId == "admin") 
+    {
+        cout << "The selected user cannot be deleted!" << endl;
+        return;
+    }
+    DB dbControl;
+    dbControl.DeleteUser(userId);
+}
 
+string RequestValue(string msg) 
+{
+    string value = "";
+    cout << msg;
+    std::getline(std::cin >> std::ws, value);
+    cout << endl;
+    return value;
 }

@@ -106,6 +106,22 @@ class DB {
             vector<string> result = Parser(movieList);
             return result;
         }
+        void DeleteUser(string userId) 
+        {
+            string users = GetTableData(USERS_TABLE);
+            string pass = GetTableData(PASSWORD_TABLE);
+            vector<string> data = Parser(users);
+            vector<string> dataPass = Parser(pass);
+            string newUserData = "";
+            string newCredData = "";
+            for (std::string user : data)
+                if (user.rfind(userId, 0) != 0) newUserData += (user + ";");
+            for (std::string cred : dataPass)
+                if (cred.rfind(userId, 0) != 0) newCredData += (cred + ";");
+            
+            overWriteFile(newUserData, getTablePath(USERS_TABLE));
+            overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
+        }
 
     private:
         const int PASSWORD_TABLE = 1;
