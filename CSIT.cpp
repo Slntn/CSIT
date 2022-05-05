@@ -22,7 +22,7 @@ void ShowUserList();
 void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
-std::vector<Movie> ShowMovieList();
+std::vector<Movie> ShowMovieList(bool isAdmin = false);
 
 int main()
 {   
@@ -91,7 +91,7 @@ void UserPanel(int codePanel, bool isAdminLogin)
     }
 }
 
-std::vector<Movie> ShowMovieList()
+std::vector<Movie> ShowMovieList(bool isAdmin)
 {
     DB dbReader;
     vector<string> result = dbReader.FetchMovieList();
@@ -102,7 +102,7 @@ std::vector<Movie> ShowMovieList()
     for (int i = 0; i < size; i++)
     {      
        Movie mv(result.at(i));
-       mv.DisplayMovie(i);
+       mv.DisplayMovie(i, isAdmin);
        movieListVector.push_back(mv);
     }
     return movieListVector;
@@ -190,8 +190,8 @@ void ShowUserList()
 int MovieMenu() {
     int menu = 0;
     cout << "\n\n1. Play Movie" << endl;
-    cout << "2. Show movie list" << endl;
-    cout << "3. Show review" << endl;
+    cout << "2. Movie list" << endl;
+    cout << "3. Reviews" << endl;
     cout << "4. Close Menu and LogOut" << endl;
     cin >> menu;
     return menu;
@@ -205,7 +205,7 @@ void AdminMenu()
         if (select == 2) AddNewUser();
         if (select == 3) {}//Delete user
         if (select == 4) {
-            ShowMovieList();
+            ShowMovieList(true);
             cout << endl;
         }
         if (select == 5) AddNewMovie();
@@ -217,10 +217,10 @@ void AdminMenu()
 bool AdminMainMenu(int& selection) 
 {
     cout << "Admin Control:" << endl;
-    cout << "1. See list of users" << endl;
+    cout << "1. The list of the registered users" << endl;
     cout << "2. Add a new user" << endl;
     cout << "3. Delete user" << endl;
-    cout << "4. See a list of available movies" << endl;
+    cout << "4. The list of available movies" << endl;
     cout << "5. Add a new movie" << endl;
     cout << "6. Delete a movie" << endl;
     cout << "0. Close Menu and LogOut" << endl;

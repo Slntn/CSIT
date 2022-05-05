@@ -33,9 +33,11 @@ class Movie {
 			exparation = result[6];
 		}
 
-		void DisplayMovie(int i) 
+		void DisplayMovie(int i, bool showId = false) 
 		{
-			cout << i << "\t" << title << " - " << genre << endl;
+			cout << i << "\t";
+			if(showId) cout << id << "\t\t";
+			cout << title << " - " << genre << endl;
 		}
 
 		void ShowMovieInfo() 
