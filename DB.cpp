@@ -24,7 +24,6 @@ class DB {
             }
             return found;
         }
-        string GetUserTablePath(string userName) { return "c:\\db\\users\\" + userName + ".txt"; }
         string GetRatingTablePath(string movieId) { return "c:\\db\\rating\\" + movieId + ".txt"; }
         string GetCommentsTablePath(string movieId) { return "c:\\db\\comments\\" + movieId + ".txt"; }
         string GetTableData(int tableCode) 
@@ -83,11 +82,14 @@ class DB {
         }
         void AddNewMovie(string newMovie) 
         {
-            string id = "M0VIE#" + Counter() + ',';
-            string newRecord = id + newMovie;
+            string id = "M0VIE#" + Counter();
+            string newRecord = id + ',' + newMovie;
             string tableData = GetTableData(3);
             string newTableData = tableData + newRecord;
             overWriteFile(newTableData, getTablePath(3));
+            //create bew tables
+            overWriteFile("", GetRatingTablePath(id));
+            overWriteFile("", GetCommentsTablePath(id));
         }
         void AddNewUser(string user, string cred)
         {
