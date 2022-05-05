@@ -16,6 +16,7 @@ void UserMenu(std::vector<Movie>);
 void AdminMenu();
 void AddNewMovie();
 void AddNewUser();
+void DeleteUser();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
 void ShowUserList();
@@ -181,7 +182,7 @@ void ShowUserList()
     cout << "List of the users: " << endl;
     for (auto user : dbData) 
     {
-        if(user.length()) cout << i << user << endl;
+        if(user.length()) cout << i << " - " << user << endl;
         i++;
     }
     cout << endl;
@@ -203,7 +204,7 @@ void AdminMenu()
     do {
         if (select == 1) ShowUserList();
         if (select == 2) AddNewUser();
-        if (select == 3) {}//Delete user
+        if (select == 3) DeleteUser();
         if (select == 4) {
             ShowMovieList(true);
             cout << endl;
@@ -263,4 +264,9 @@ void AddNewUser()
     SetString(cred, "Enter user password : ", ';');
     dbControl.AddNewUser(user, cred);
     cout << "Add new user process - completed!" << endl;
+}
+
+void DeleteUser()
+{
+
 }
