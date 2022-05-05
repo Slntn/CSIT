@@ -10,7 +10,7 @@ class DB {
 	public:
         bool VerifyCredentials(string userData)
         {
-            string filePath = getTablePath(1);
+            string filePath = getTablePath(PASSWORD_TABLE);
             string line;
             bool found = false;          
             ifstream file(filePath);
@@ -77,24 +77,22 @@ class DB {
         }
         std::vector<string> GetAllUsers()
         {
-            string dbData = GetTableData(2);
+            string dbData = GetTableData(USERS_TABLE);
             return Parser(dbData);
         }
         void AddNewMovie(string newMovie) 
         {
             string id = "M0VIE#" + Counter();
             string newRecord = id + ',' + newMovie;
-            string tableData = GetTableData(3);
+            string tableData = GetTableData(MOVIE_TABLE);
             string newTableData = tableData + newRecord;
-            overWriteFile(newTableData, getTablePath(3));
+            overWriteFile(newTableData, getTablePath(MOVIE_TABLE));
             //create bew tables
             overWriteFile("", GetRatingTablePath(id));
             overWriteFile("", GetCommentsTablePath(id));
         }
         void AddNewUser(string user, string cred)
         {
-            const int PASSWORD_TABLE = 1;
-            const int USERS_TABLE = 2;
             string passTableData = GetTableData(PASSWORD_TABLE);
             string usersTableData = GetTableData(USERS_TABLE);
             string newCredData = passTableData + cred;
@@ -102,8 +100,18 @@ class DB {
             overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
             overWriteFile(newUsersData, getTablePath(USERS_TABLE));
         }
+        std::vector<string> FetchMovieList()
+        {
+            const string movieList = GetTableData(MOVIE_TABLE);
+            vector<string> result = Parser(movieList);
+            return result;
+        }
 
     private:
+        const int PASSWORD_TABLE = 1;
+        const int USERS_TABLE = 2;
+        const int MOVIE_TABLE = 3;
+        const int COUNTER_TABLE = 3;
         string getTablePath(int tableCode) 
         {
             if (tableCode == 1) return "c:\\db\\pass.txt";
@@ -144,9 +152,9 @@ class DB {
         }
         string Counter() 
         {
-            string value = GetTableData(4);
+            string value = GetTableData(COUNTER_TABLE);
             string newValue = std::to_string((std::stoi(value) + 1));
-            overWriteFile(newValue, getTablePath(4));
+            overWriteFile(newValue, getTablePath(COUNTER_TABLE));
             return value;
         }
 };

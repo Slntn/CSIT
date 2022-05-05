@@ -22,7 +22,6 @@ void ShowUserList();
 void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
-string GetCurrentDay();
 std::vector<Movie> ShowMovieList();
 
 int main()
@@ -95,15 +94,8 @@ void UserPanel(int codePanel, bool isAdminLogin)
 std::vector<Movie> ShowMovieList()
 {
     DB dbReader;
-    vector<string> result;
+    vector<string> result = dbReader.FetchMovieList();
     vector<Movie> movieListVector;
-    const string movieList = dbReader.GetTableData(3);   
-    stringstream strStream(movieList);
-    while (strStream.good()) {
-        string str;
-        getline(strStream, str, ';');
-        result.push_back(str);
-    }
 
     cout << "Available movies: " << endl;
     const int size = (result.size() - 1);
