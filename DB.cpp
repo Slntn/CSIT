@@ -141,9 +141,9 @@ class DB {
             string data = GetTableData(INBOUND_JOB_PATH);
             if (data.length() > 3) 
             {
-                SetLogs(logs, std::to_string(i), "Data received!\n");
+                SetLogs(logs, std::to_string(i), "Data received!");
                 std::vector<string> parsedData = Parser(data);
-                SetLogs(logs, std::to_string(i), "Data parsed!\n");
+                SetLogs(logs, std::to_string(i), "Data parsed!");
                 for (auto i : parsedData)
                 {
                     if (i.length() != 0) AddNewMovie((i+";"));
@@ -154,13 +154,17 @@ class DB {
             }
             else 
             {
-                SetLogs(logs, std::to_string(i), "No data received!\n");
+                SetLogs(logs, std::to_string(i), "No data received!");
             }
 
-            SetLogs(logs, std::to_string(i), "Job process completed!\n");
+            SetLogs(logs, std::to_string(i), "Job process completed!");
             string tableLogsData = GetTableData(BATCH_LOGS_TABLE);
             tableLogsData += logs;
             OverWriteFile(tableLogsData, GetTablePath(BATCH_LOGS_TABLE));
+        }
+        string GetTimeStamp()
+        {
+            return std::to_string(TimeSinceEpochMillisec());
         }
     private:
         const int PASSWORD_TABLE = 1;
@@ -189,7 +193,7 @@ class DB {
         }
         void SetLogs(string& logs, string job, string msg)
         {
-            string log = ("JOB#" + job + " - " + std::to_string(TimeSinceEpochMillisec()) + msg);
+            string log = (GetTimeStamp() + " - " + "JOB#" + job + ": " + msg + ";");
             logs += log;
         }
         double ParseAndCalculateRating(string data)

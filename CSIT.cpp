@@ -265,7 +265,7 @@ void AddNewUser()
     cred = user;
     SetString(user, "Enter user first name : ", ',');
     SetString(user, "Enter user last name : ", ',');
-    SetString(user, "Enter current date (Example: 05 / 02 / 2024): ", ';');
+    user += (dbControl.GetTimeStamp() + ";");
     SetString(cred, "Enter user password : ", ';');
     dbControl.AddNewUser(user, cred);
     cout << "Add new user process - completed!" << endl;
@@ -294,7 +294,7 @@ void DeleteMovie()
 
 void BatchService() 
 {
-    const int MILLISECONDS_IN_MIN = 60000;
+    const int MILLISECONDS_IN_MIN = 600;
     DB dbControl;
     int numOfJobs = std::stoi(RequestValue("Please, enter number of jobs:"));
     int interval = std::stoi(RequestValue("Please, enter jobs interval(in min):"));
