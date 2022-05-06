@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Batch.cpp" />
     <ClCompile Include="CSIT.cpp" />
     <ClCompile Include="DB.cpp" />
     <ClCompile Include="Movie.cpp" />

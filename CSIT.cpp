@@ -7,6 +7,7 @@
 #include <string>
 #include "DB.cpp"
 #include "Movie.cpp"
+#include <windows.h>
 using namespace std;
 
 bool MenuSelection(int&);
@@ -21,6 +22,7 @@ void DeleteMovie();
 void DisplayMovieList(std::vector<Movie>);
 void MovieRaiting(string);
 void ShowUserList();
+void BatchService();
 void SetString(string&, string, char);
 int MovieMenu();
 string UserLogin(bool);
@@ -40,7 +42,7 @@ int main()
                 UserPanel(2, true);
 				break;
             case 3:
-                cout << "Batch processing!" << endl;
+                BatchService();
                 break;
         }
     } while (!MenuSelection(menuSelection));
@@ -53,7 +55,7 @@ bool MenuSelection(int& menuSelection)
     cout << "Main Menu" << endl;
     cout << "1. User login" << endl;
     cout << "2. Admin login" << endl;
-    cout << "3. Job Batch" << endl;
+    cout << "3. Start Batch" << endl;
     cout << "0. Close app" << endl;
     cin >> menuSelection;
     return (menuSelection == 0);
@@ -290,6 +292,22 @@ void DeleteMovie()
     dbControl.DeleteMovie(id);
 }
 
+void BatchService() 
+{
+    const int MILLISECONDS_IN_MIN = 60000;
+    DB dbControl;
+    int numOfJobs = std::stoi(RequestValue("Please, enter number of jobs:"));
+    int interval = std::stoi(RequestValue("Please, enter jobs interval(in min):"));
+    int timeout = MILLISECONDS_IN_MIN * interval;
+    for (int i = 0; i < numOfJobs; i++) 
+    {
+        dbControl.BatchProcess(i);
+        Sleep(timeout);
+    }
+    cout << "All Jobs Are Completed!" << endl;
+
+}
+
 string RequestValue(string msg) 
 {
     string value = "";
@@ -298,3 +316,4 @@ string RequestValue(string msg)
     cout << endl;
     return value;
 }
+

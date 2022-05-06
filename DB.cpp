@@ -4,13 +4,14 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <chrono>
 using namespace std;
 
 class DB {
 	public:
         bool VerifyCredentials(string userData)
         {
-            string filePath = getTablePath(PASSWORD_TABLE);
+            string filePath = GetTablePath(PASSWORD_TABLE);
             string line;
             bool found = false;          
             ifstream file(filePath);
@@ -26,7 +27,7 @@ class DB {
         }
         string GetTableData(int tableCode) 
         {
-            string filePath = getTablePath(tableCode);
+            string filePath = GetTablePath(tableCode);
             string line, fileData;
             ifstream file(filePath);
             if (!file.is_open()) {
@@ -62,8 +63,8 @@ class DB {
             string CommentData = GetTableData(CommentPath);
             RatingData = RatingData + ";" + rating;
             CommentData = CommentData +";" + comment;
-            overWriteFile(RatingData, RatingPath);
-            overWriteFile(CommentData, CommentPath);
+            OverWriteFile(RatingData, RatingPath);
+            OverWriteFile(CommentData, CommentPath);
         }   
         void DisplayReviews(string movieId)
         {
@@ -78,10 +79,10 @@ class DB {
             string newRecord = id + ',' + newMovie;
             string tableData = GetTableData(MOVIE_TABLE);
             string newTableData = tableData + newRecord;
-            overWriteFile(newTableData, getTablePath(MOVIE_TABLE));
+            OverWriteFile(newTableData, GetTablePath(MOVIE_TABLE));
             //create new tables
-            overWriteFile("", GetRatingTablePath(id));
-            overWriteFile("", GetCommentsTablePath(id));
+            OverWriteFile("", GetRatingTablePath(id));
+            OverWriteFile("", GetCommentsTablePath(id));
         }
         void AddNewUser(string user, string cred)
         {
@@ -89,8 +90,8 @@ class DB {
             string usersTableData = GetTableData(USERS_TABLE);
             string newCredData = passTableData + cred;
             string newUsersData = usersTableData + user;
-            overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
-            overWriteFile(newUsersData, getTablePath(USERS_TABLE));
+            OverWriteFile(newCredData, GetTablePath(PASSWORD_TABLE));
+            OverWriteFile(newUsersData, GetTablePath(USERS_TABLE));
         }    
         void DeleteUser(string userId) 
         {
@@ -106,8 +107,8 @@ class DB {
             for (std::string cred : dataPass) 
                 if (cred.rfind(userId, 0) != 0 && cred.length() > 1) newCredData += (cred + ";");
 
-            overWriteFile(newUserData, getTablePath(USERS_TABLE));
-            overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
+            OverWriteFile(newUserData, GetTablePath(USERS_TABLE));
+            OverWriteFile(newCredData, GetTablePath(PASSWORD_TABLE));
         }
         void DeleteMovie(string movieId)
         {
@@ -117,7 +118,7 @@ class DB {
             for (std::string movie : data) {
                 if (movie.rfind(movieId, 0) != 0 && movie.length() > 1) newData += (movie + ";");
             }      
-            overWriteFile(newData, getTablePath(MOVIE_TABLE));
+            OverWriteFile(newData, GetTablePath(MOVIE_TABLE));
             string pathR = GetRatingTablePath(movieId);
             string pathC = GetCommentsTablePath(movieId);
             std::remove(pathR.c_str());
@@ -134,27 +135,62 @@ class DB {
             string dbData = GetTableData(USERS_TABLE);
             return Parser(dbData);
         }
+        void BatchProcess(int i)
+        {
+            string logs = "";
+            string data = GetTableData(INBOUND_JOB_PATH);
+            if (data.length() > 3) 
+            {
+                SetLogs(logs, std::to_string(i), "Data received!\n");
+                std::vector<string> parsedData = Parser(data);
+                SetLogs(logs, std::to_string(i), "Data parsed!\n");
+                for (auto i : parsedData)
+                {
+                    if (i.length() != 0) AddNewMovie((i+";"));
+                }
 
+                string jobFilePath = GetTablePath(INBOUND_JOB_PATH);
+                std::remove(jobFilePath.c_str());
+            }
+            else 
+            {
+                SetLogs(logs, std::to_string(i), "No data received!\n");
+            }
+
+            SetLogs(logs, std::to_string(i), "Job process completed!\n");
+            string tableLogsData = GetTableData(BATCH_LOGS_TABLE);
+            tableLogsData += logs;
+            OverWriteFile(tableLogsData, GetTablePath(BATCH_LOGS_TABLE));
+        }
     private:
         const int PASSWORD_TABLE = 1;
         const int USERS_TABLE = 2;
         const int MOVIE_TABLE = 3;
-        const int COUNTER_TABLE = 3;
-        string getTablePath(int tableCode) 
+        const int COUNTER_TABLE = 4;
+        const int BATCH_LOGS_TABLE = 5;
+        const int INBOUND_JOB_PATH = 6;
+        string GetTablePath(int tableCode) 
         {
             if (tableCode == 1) return "c:\\db\\pass.txt";
             if (tableCode == 2) return "c:\\db\\users.txt";
             if (tableCode == 3) return "c:\\db\\movies.txt";
             if (tableCode == 4) return "c:\\db\\counter.txt";
+            if (tableCode == 5) return "c:\\db\\batch\\logs.txt";
+            if (tableCode == 6) return "c:\\inbound\\job.txt";
             return "NA";
         }
         string GetRatingTablePath(string movieId) { return "c:\\db\\rating\\" + movieId + ".txt"; }
         string GetCommentsTablePath(string movieId) { return "c:\\db\\comments\\" + movieId + ".txt"; }
-        void overWriteFile(string data, string path) 
+        void OverWriteFile(string data, string path) 
         {
             std::ofstream ofs(path, std::ofstream::trunc);
             ofs << data;
             ofs.close();
+        }
+        void SetLogs(string& logs, string job, string msg)
+        {
+            string log = ("JOB#" + job + " - " + std::to_string(TimeSinceEpochMillisec()) + msg);
+            logs += log;
         }
         double ParseAndCalculateRating(string data)
         {
@@ -184,7 +220,12 @@ class DB {
         {
             string value = GetTableData(COUNTER_TABLE);
             string newValue = std::to_string((std::stoi(value) + 1));
-            overWriteFile(newValue, getTablePath(COUNTER_TABLE));
+            OverWriteFile(newValue, GetTablePath(COUNTER_TABLE));
             return value;
+        }
+        uint64_t TimeSinceEpochMillisec() 
+        {
+            using namespace std::chrono;
+            return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
         }
 };
