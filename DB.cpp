@@ -24,8 +24,6 @@ class DB {
             }
             return found;
         }
-        string GetRatingTablePath(string movieId) { return "c:\\db\\rating\\" + movieId + ".txt"; }
-        string GetCommentsTablePath(string movieId) { return "c:\\db\\comments\\" + movieId + ".txt"; }
         string GetTableData(int tableCode) 
         {
             string filePath = getTablePath(tableCode);
@@ -49,6 +47,13 @@ class DB {
             file.close();
             return fileData;
         }
+        double GetRating(string movieId)
+        {
+            string path = GetRatingTablePath(movieId);
+            string data = GetTableData(path);
+            const double RESULT = ParseAndCalculateRating(data);
+            return RESULT;
+        }
         void UpdateRating(string movieId, string rating, string comment)
         {
             string RatingPath = GetRatingTablePath(movieId);
@@ -59,26 +64,13 @@ class DB {
             CommentData = CommentData +";" + comment;
             overWriteFile(RatingData, RatingPath);
             overWriteFile(CommentData, CommentPath);
-        }
-
-        double GetRating(string movieId)
-        {
-            string path = GetRatingTablePath(movieId);
-            string data = GetTableData(path);
-            const double RESULT = ParseAndCalculateRating(data);
-            return RESULT;
-        }
+        }   
         void DisplayReviews(string movieId)
         {
             string path = GetCommentsTablePath(movieId);
             string data = GetTableData(path);
             std::vector<string> dbData = Parser(data);
             for (auto line : dbData) cout << line << endl;
-        }
-        std::vector<string> GetAllUsers()
-        {
-            string dbData = GetTableData(USERS_TABLE);
-            return Parser(dbData);
         }
         void AddNewMovie(string newMovie) 
         {
@@ -99,13 +91,7 @@ class DB {
             string newUsersData = usersTableData + user;
             overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
             overWriteFile(newUsersData, getTablePath(USERS_TABLE));
-        }
-        std::vector<string> FetchMovieList()
-        {
-            const string movieList = GetTableData(MOVIE_TABLE);
-            vector<string> result = Parser(movieList);
-            return result;
-        }
+        }    
         void DeleteUser(string userId) 
         {
             string users = GetTableData(USERS_TABLE);
@@ -114,11 +100,12 @@ class DB {
             vector<string> dataPass = Parser(pass);
             string newUserData = "";
             string newCredData = "";
-            for (std::string user : data)
-                if (user.rfind(userId, 0) != 0) newUserData += (user + ";");
-            for (std::string cred : dataPass)
-                if (cred.rfind(userId, 0) != 0) newCredData += (cred + ";");
-            
+            for (std::string user : data) 
+                if (user.rfind(userId, 0) != 0 && user.length() > 1) newUserData += (user + ";");
+                
+            for (std::string cred : dataPass) 
+                if (cred.rfind(userId, 0) != 0 && cred.length() > 1) newCredData += (cred + ";");
+
             overWriteFile(newUserData, getTablePath(USERS_TABLE));
             overWriteFile(newCredData, getTablePath(PASSWORD_TABLE));
         }
@@ -127,13 +114,25 @@ class DB {
             string dbData = GetTableData(MOVIE_TABLE);
             vector<string> data = Parser(dbData);
             string newData = "";
-            for (std::string movie : data)
-                if (movie.rfind(movieId, 0) != 0) newData += (movie + ";");
+            for (std::string movie : data) {
+                if (movie.rfind(movieId, 0) != 0 && movie.length() > 1) newData += (movie + ";");
+            }      
             overWriteFile(newData, getTablePath(MOVIE_TABLE));
             string pathR = GetRatingTablePath(movieId);
             string pathC = GetCommentsTablePath(movieId);
             std::remove(pathR.c_str());
             std::remove(pathC.c_str());
+        }
+        std::vector<string> FetchMovieList()
+        {
+            const string movieList = GetTableData(MOVIE_TABLE);
+            vector<string> result = Parser(movieList);
+            return result;
+        }
+        std::vector<string> GetAllUsers()
+        {
+            string dbData = GetTableData(USERS_TABLE);
+            return Parser(dbData);
         }
 
     private:
@@ -149,6 +148,8 @@ class DB {
             if (tableCode == 4) return "c:\\db\\counter.txt";
             return "NA";
         }
+        string GetRatingTablePath(string movieId) { return "c:\\db\\rating\\" + movieId + ".txt"; }
+        string GetCommentsTablePath(string movieId) { return "c:\\db\\comments\\" + movieId + ".txt"; }
         void overWriteFile(string data, string path) 
         {
             std::ofstream ofs(path, std::ofstream::trunc);
