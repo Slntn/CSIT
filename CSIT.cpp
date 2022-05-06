@@ -1,4 +1,4 @@
-// Authors:            Anton Silivonchyk, 
+// Author:             Anton Silivonchyk
 // Source file:        CSIT.cpp
 // Description:        Final Project: streaming service;
 // IDE used:           Visual Studio 2019
@@ -299,10 +299,13 @@ void BatchService()
     int numOfJobs = std::stoi(RequestValue("Please, enter number of jobs:"));
     int interval = std::stoi(RequestValue("Please, enter jobs interval(in min):"));
     int timeout = MILLISECONDS_IN_MIN * interval;
+    cout << "The batch is started!" << endl;
     for (int i = 0; i < numOfJobs; i++) 
     {
+        cout << "Job# "<< i << " - in progress!" << endl;
         dbControl.BatchProcess(i);
         Sleep(timeout);
+        cout << "Job# " << i << " - completed!" << endl;
     }
     cout << "All Jobs Are Completed!" << endl;
 
